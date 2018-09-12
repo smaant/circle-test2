@@ -1,0 +1,47 @@
+version: 2.0
+references:
+  docker_images: &docker_images
+    - image: alpine:3.6
+
+  working_directory: &working_directory
+    working_directory: ~/
+
+jobs:
+  test:
+    docker: *docker_images
+
+    <<: *working_directory
+
+    steps:
+      - checkout
+
+      - run: echo YAY
+
+      - run: mkdir test && date > test/date.txt
+
+      - store_artifacts:
+          path: test
+
+  deploy:
+    docker: *docker_images
+
+    <<: *working_directory
+
+    steps:
+      - run: env
+
+workflows:
+  version: 2
+  test_deploy:
+    jobs:
+      - test
+      - deploy:
+          context: org-global
+          requires:
+            - test
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master
