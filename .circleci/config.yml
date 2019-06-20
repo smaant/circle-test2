@@ -17,12 +17,12 @@ jobs:
       
       - run: sleep 5
 
-      - run: for i in `seq 1 100`; do echo $i; done
+      - run: for i in `seq 1 25`; do echo $i; sleep .1; done
 
-      - run: mkdir test && date > test/date.txt
+#       - run: mkdir test && date > test/date.txt
 
-      - store_artifacts:
-          path: test
+#       - store_artifacts:
+#           path: test
 
   deploy:
     docker: *docker_images
@@ -37,10 +37,10 @@ workflows:
   test_deploy:
     jobs:
       - test
-      - deploy:
-          context: smaant-org-global
-          requires:
-            - test
+#       - deploy:
+#           context: smaant-org-global
+#           requires:
+#             - test
 
 experimental:
   notify:
